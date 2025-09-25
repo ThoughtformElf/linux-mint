@@ -1,0 +1,9 @@
+[Unit]
+Description=Redshift color temperature adjustment
+
+[Service]
+ExecStart=/usr/bin/redshift
+Restart=always
+
+[Install]
+WantedBy=default.target

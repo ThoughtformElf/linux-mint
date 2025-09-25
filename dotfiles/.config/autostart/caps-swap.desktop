@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Swap Caps-Esc
+Exec=setxkbmap -option caps:swapescape
+Comment=Swap Caps Lock and Escape keys on startup
