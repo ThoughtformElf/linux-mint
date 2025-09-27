@@ -139,7 +139,7 @@ else
 fi
 
 # QRx
-export QRX="$HOME/ozramos"
+export QRX="$HOME/github"
 export HEY="$QRX/hey"
 export OZ="$QRX"
 export ME="$OZ"
@@ -163,7 +163,7 @@ hey() {
 }
 export -f hey
 context() {
-  "$HEY/utils/contextualize.sh" "$@"
+  "$LINUX/utils/contextualize.sh" "$@"
 }
 export -f context
 save() {
