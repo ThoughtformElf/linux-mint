@@ -121,64 +121,32 @@ process_file() {
 {
     echo "<context>"
 
-    # THE FIX: Use a single recursive `find` command on all provided paths.
-    # This naturally handles files, directories, and recursion.
-    # -print0 and -d $'\0' are used to safely handle filenames with spaces or special characters.
-    find "${paths_to_process[@]}" -print0 | while IFS= read -r -d $'\0' item; do
-        # For every single item found (file or directory), check if we should process it.
-        # This correctly prunes entire directories if they match an ignore rule.
-        if ! should_process "$item"; then
-            # If find is inside an ignored directory, we must prevent it from traversing further.
-            # We can do this by telling find to prune the path. This check is done inside the find command itself.
-            # The logic here simplifies to just checking files.
-            continue
-        fi
-
-        # We only want to process files, not the directories themselves.
-        if [ -f "$item" ]; then
-            process_file "$item"
-        fi
-    done
-
-    # A more robust find command that prunes directly
-    # This is a superior implementation.
-    prune_args=()
-    for pattern in "${custom_ignore_patterns[@]}" "${default_exclude_patterns[@]}"; do
-        # We need to build up a list of -path ... -prune arguments for find
-        # This is complex to do correctly with shell globbing vs find globbing.
-        # The simpler loop above is more readable and almost as effective.
-        # Let's stick with the simpler, more understandable implementation.
-        # The following is a re-implementation of the above loop to be more robust.
-    done
-
-    # Re-implementing the main processing loop to be clearer and more correct.
-    # The previous simple loop was good, but let's make it great.
-
-    # We process each path argument individually to handle top-level ignores correctly.
+    # Process each path argument from the command line individually.
     for path_arg in "${paths_to_process[@]}"; do
         if [ ! -e "$path_arg" ]; then
             echo "<!-- Warning: Path '$path_arg' does not exist, skipping. -->" >&2
             continue
         fi
 
-        # First, check the top-level path itself.
+        # First, check the top-level path itself. If it's ignored, skip the whole thing.
         if ! should_process "$path_arg"; then
-            continue # Skip this entire argument if it's ignored.
+            continue
         fi
 
-        # If it's a file, process it.
+        # If the argument is a file, process it directly.
         if [ -f "$path_arg" ]; then
             process_file "$path_arg"
-        # If it's a directory, find all files within it and check each one.
+        # If the argument is a directory, find all files within it RECURSIVELY.
         elif [ -d "$path_arg" ]; then
+            # Use -print0 and a while loop to handle all filenames safely.
             find "$path_arg" -type f -print0 | while IFS= read -r -d $'\0' file_in_dir; do
+                # Check every single file found against the rules.
                 if should_process "$file_in_dir"; then
                     process_file "$file_in_dir"
                 fi
             done
         fi
     done
-
 
     echo "</context>"
 } | "$PARSE_SCRIPT" # Pipe the entire captured output to parse.sh
