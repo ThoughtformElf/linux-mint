@@ -47,6 +47,17 @@ if [[ ! -f "$KDENLIVE_APPIMAGE" ]] && ! command -v kdenlive >/dev/null 2>&1; the
   echo "Kdenlive AppImage installed to $KDENLIVE_APPIMAGE"
 fi
 
+# Install Espanso text expander
+if ! command -v espanso >/dev/null 2>&1; then
+  wget https://github.com/espanso/espanso/releases/latest/download/espanso-debian-x11-amd64.deb
+  sudo apt install ./espanso-debian-x11-amd64.deb
+  rm espanso-debian-x11-amd64.deb
+  
+  # Register and start espanso service
+  espanso service register
+  espanso start
+fi
+
 # Services
 systemctl --user enable --now redshift.service
 sudo systemctl disable --now ttyd
