@@ -219,5 +219,7 @@ export BG_BRIGHT_WHITE='\033[107m'
 export RESET='\033[0m'
 
 # devtools
-source ~/emsdk/emsdk_env.sh
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 export PATH="$HOME/bin:$PATH"
