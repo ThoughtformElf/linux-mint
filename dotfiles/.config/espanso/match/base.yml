@@ -1,6 +1,6 @@
 # espanso match file
 
-# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+# For a complete introduction, visit the official docs at: [https://espanso.org/docs/](https://espanso.org/docs/)
 
 # You can use this file to define the base matches (aka snippets)
 # that will be available in every application when using espanso.
@@ -34,7 +34,7 @@ matches:
         params:
           cmd: "echo 'Hello from your shell'"
 
-  # And much more! For more information, visit the docs: https://espanso.org/docs/
+  # And much more! For more information, visit the docs: [https://espanso.org/docs/](https://espanso.org/docs/)
 
   # Expands ",t" to the current time, e.g., **1430**
   - trigger: ",t"
@@ -61,4 +61,7 @@ matches:
         type: date
         params:
           format: "%y%m%d %H%M"
+
+  - trigger: ",full"
+    replace: "please show the FULL FILE for anything you edit, no code snippets or partial code"
 
