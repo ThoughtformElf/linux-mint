@@ -157,7 +157,7 @@ gd(){
 }
 export -f gs
 gp(){
-   git checkout main; git merge dev; git checkout dev
+   git checkout main; git merge dev; git push; git checkout dev
 }
 export -f gp
 
