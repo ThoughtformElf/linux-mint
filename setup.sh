@@ -2,7 +2,8 @@
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Packages
-sudo apt install tmux git jq redshift ttyd xsel qemu-system-x86 ffmpeg
+sudo apt update
+sudo apt install tmux git jq redshift ttyd xsel
 
 # NodeJS
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
