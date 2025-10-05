@@ -19,6 +19,7 @@ fi
 if ! command -v brave-browser >/dev/null 2>&1; then
   curl -fsS https://dl.brave.com/install.sh | sh
 fi
+gsettings set org.gnome.desktop.interface font-name 'Noto Sans 11'
 
 # Install latest Neovim via AppImage only if not already installed
 mkdir -p "$HOME/Applications"
