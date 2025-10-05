@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Redshift
+Exec=redshift -l 45.5152:-122.6784 -t 6500:3700
+Terminal=false
