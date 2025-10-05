@@ -16,17 +16,20 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      -- Setup for lua
-      lspconfig.lua_ls.setup({
+      -- Configure servers using new vim.lsp.config API
+      vim.lsp.config('lua_ls', {
         capabilities = capabilities
       })
-      -- Setup for markdown
-      lspconfig.marksman.setup({
+      
+      vim.lsp.config('marksman', {
         capabilities = capabilities
       })
+
+      -- Enable the configured servers
+      vim.lsp.enable({'lua_ls', 'marksman'})
     end
   }
 }
+
