@@ -156,6 +156,10 @@ gd(){
   "git" "diff" "$@"
 }
 export -f gs
+gp(){
+   git checkout main; git merge dev; git checkout dev
+}
+export -f gp
 
 # Hey
 hey() {
