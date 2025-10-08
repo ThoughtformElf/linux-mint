@@ -46,7 +46,7 @@ matches:
           format: "%H%M"
   # Expands ",d" to the current date, e.g. 250821
   - trigger: ",d"
-    replace: "{{mydate}}"
+    replace: "{{mydate}} "
     vars:
       - name: mydate
         type: date
