@@ -63,5 +63,5 @@ matches:
           format: "%y%m%d %H%M"
 
   - trigger: ",full"
-    replace: "please show the FULL FILE for anything you edit, no code snippets or partial code, dont wrap with <context><file> tags those are just to help you contextualize, show in normal markdown code blocks"
+    replace: "please show the FULL FILE for anything you edit, no code snippets or partial code, dont wrap with <context><file> tags those are just to help you contextualize, show in normal markdown code blocks, put file name/paths before the codeblock not inside the file as comment"
 
