@@ -3,7 +3,7 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Packages
 sudo apt update
-sudo apt install tmux git jq redshift ttyd xsel
+sudo apt install tmux git jq redshift ttyd xsel tree
 
 # NodeJS
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
@@ -32,13 +32,13 @@ fi
 
 # Install code editor
 if ! command -v code >/dev/null 2>&1; then
-  sudo apt install -y wget gpg apt-transport-https ca-certificates software-properties-common  # prereqs [web:2]
-  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/packages.microsoft.gpg  # key to keyring file [web:6]
-  sudo install -D -o root -g root -m 644 /tmp/packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg  # place key [web:6]
-  sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'  # repo [web:6]
-  rm -f /tmp/packages.microsoft.gpg  # cleanup [web:6]
-  sudo apt update  # refresh lists [web:2]
-  sudo apt install -y code  # install stable VS Code [web:2]
+  sudo apt install -y wget gpg apt-transport-https ca-certificates software-properties-common # prereqs
+  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/packages.microsoft.gpg # key to keyring file
+  sudo install -D -o root -g root -m 644 /tmp/packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg # place key
+  sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' # repo
+  rm -f /tmp/packages.microsoft.gpg # cleanup
+  sudo apt update # refresh lists
+  sudo apt install -y code # install stable VS Code
 fi
 
 # Install video editor
@@ -58,6 +58,40 @@ if ! command -v espanso >/dev/null 2>&1; then
   # Register and start espanso service
   espanso service register
   espanso start
+fi
+
+# Install Ollama if it doesn't exist
+if ! command -v ollama >/dev/null 2>&1; then
+  echo "Ollama not found. Installing..."
+  curl -fsSL https://ollama.com/install.sh | sh
+else
+  echo "Ollama is already installed."
+fi
+
+# Install Ollama models only if they don't already exist
+if command -v ollama >/dev/null 2>&1; then
+  MODELS_TO_INSTALL=(
+    "qwen3:0.6b-q4_K_M"
+    "qwen3:1.7b-q4_K_M"
+    "embeddinggemma:300m"
+    "phi4-mini:3.8b-q4_K_M"
+    "gemma3:270m-it-qat"
+    "gemma3:1b-it-qat"
+    "gemma3n:e2b-it-q4_K_M"
+    "deepseek-r1:1.5b-qwen-distill-q4_K_M"
+  )
+
+  echo "Checking for and installing missing Ollama models..."
+  for model in "${MODELS_TO_INSTALL[@]}"; do
+    if ! ollama list | grep -q "^$model"; then
+      echo "Model $model not found. Pulling..."
+      ollama pull "$model"
+    else
+      echo "Model $model already exists. Skipping."
+    fi
+  done
+else
+  echo "Cannot check for models because Ollama is not installed."
 fi
 
 # Services
