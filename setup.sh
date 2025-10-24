@@ -73,6 +73,7 @@ if command -v ollama >/dev/null 2>&1; then
   MODELS_TO_INSTALL=(
     "qwen3:0.6b-q4_K_M"
     "qwen3:1.7b-q4_K_M"
+    "qwen3:4b-q4_K_M"
     "embeddinggemma:300m"
     "phi4-mini:3.8b-q4_K_M"
     "gemma3:270m-it-qat"
