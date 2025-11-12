@@ -90,7 +90,8 @@ should_process() {
     done
 
     # === Priority 3: Default EXCLUDES (Basename Match) ===
-    # If it wasn't included or ignored by custom rules, check default exclusions based on basename.
+    # This check is now mostly handled by 'find -prune' for directories,
+    # but it's kept for files in the top-level directory and as a fallback.
     for pattern in "${default_exclude_patterns[@]}"; do
         # Use [[ for reliable glob matching against the BASENAME
         if [[ "$item_basename" == $pattern ]]; then
@@ -138,9 +139,20 @@ process_file() {
             process_file "$path_arg"
         # If the argument is a directory, find all files within it RECURSIVELY.
         elif [ -d "$path_arg" ]; then
-            # Use -print0 and a while loop to handle all filenames safely.
-            find "$path_arg" -type f -print0 | while IFS= read -r -d $'\0' file_in_dir; do
-                # Check every single file found against the rules.
+            # Build the prune arguments for find to exclude default directories.
+            # This prevents 'find' from ever descending into them.
+            find_prune_args=()
+            # Start with a condition that is always false to simplify the loop.
+            find_prune_args+=(-false)
+            for pattern in "${default_exclude_patterns[@]}"; do
+                find_prune_args+=(-o -name "$pattern")
+            done
+
+            # Use -prune to skip descending into ignored directories.
+            # Then, find all files (-type f) in the remaining paths.
+            # The should_process check is still needed for custom --include/--ignore rules.
+            find "$path_arg" \( "${find_prune_args[@]}" \) -prune -o -type f -print0 | while IFS= read -r -d $'\0' file_in_dir; do
+                # Check every single file found against ALL rules.
                 if should_process "$file_in_dir"; then
                     process_file "$file_in_dir"
                 fi
