@@ -3,7 +3,7 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Packages
 sudo apt update
-sudo apt install tmux git jq redshift ttyd xsel tree
+sudo apt install tmux git jq redshift ttyd xsel tree python3 python3-pip python3-venv
 
 # NodeJS
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
